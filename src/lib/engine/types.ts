@@ -31,12 +31,18 @@ export interface FewShotExample {
   output: string;
 }
 
+export interface PromptAttachment {
+  name: string;
+  content: string;
+}
+
 export interface PromptInput {
   platform: Platform;
   framework: Framework;
   role: string;
   objective: string;
   context: string;
+  attachments: PromptAttachment[];
   rules: string;
   outputFormat: OutputFormat;
   outputFormatDetails: string;

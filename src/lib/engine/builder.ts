@@ -9,6 +9,7 @@ export const DEFAULT_INPUT: PromptInput = {
   role: "",
   objective: "",
   context: "",
+  attachments: [],
   rules: "",
   outputFormat: "markdown",
   outputFormatDetails: "",
@@ -137,6 +138,20 @@ export function buildPrompt(input: PromptInput): string {
       : input.framework === "profissional"
         ? buildProfissional(input)
         : buildPersona(input);
+
+  if (input.attachments.length > 0) {
+    body.push(
+      section(
+        "Base de Informação (arquivos anexados)",
+        [
+          "Utilize os documentos abaixo como fonte primária de informação. Priorize-os sobre conhecimento geral e cite o arquivo de origem quando relevante.",
+          ...input.attachments.map(
+            (a) => `### ${a.name}\n\`\`\`\n${a.content.trim()}\n\`\`\``,
+          ),
+        ].join("\n\n"),
+      ),
+    );
+  }
 
   const technique = techniqueInstructions(input.technique, input.fewShotExamples);
   if (technique) body.push(section("Técnica de Raciocínio", technique));

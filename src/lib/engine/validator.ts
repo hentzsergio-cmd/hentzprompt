@@ -5,7 +5,8 @@ const MIN_CONTEXT_CHARS = 40;
 export function validatePrompt(input: PromptInput): ValidationResult {
   const hasRole = input.role.trim().length >= 3;
   const hasObjective = input.objective.trim().length >= 10;
-  const hasContext = input.context.trim().length >= MIN_CONTEXT_CHARS;
+  const hasContext =
+    input.context.trim().length >= MIN_CONTEXT_CHARS || input.attachments.length > 0;
   const hasRules =
     input.rules.trim().length >= 5 || input.forbiddenActions.trim().length >= 5;
   const hasFormat =

@@ -76,6 +76,19 @@ describe("buildPrompt", () => {
     const out = buildPrompt(DEFAULT_INPUT);
     expect(out).toContain("[defina o especialista]");
     expect(out).toContain("[descreva o problema ou objetivo]");
+    expect(out).not.toContain("Base de Informação");
+  });
+
+  it("inclui arquivos anexados como base de informação e satisfaz o contexto", () => {
+    const input = {
+      ...DEFAULT_INPUT,
+      attachments: [{ name: "dados.csv", content: "mes,valor\njan,100" }],
+    };
+    const out = buildPrompt(input);
+    expect(out).toContain("## Base de Informação (arquivos anexados)");
+    expect(out).toContain("### dados.csv");
+    expect(out).toContain("jan,100");
+    expect(validatePrompt(input).items.find((i) => i.id === "context")?.passed).toBe(true);
   });
 });
 

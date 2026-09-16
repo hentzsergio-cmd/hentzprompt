@@ -2,6 +2,7 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { OUTPUT_FORMATS, TECHNIQUES, type FewShotExample, type PromptInput } from "@/lib/engine";
+import { FileUpload } from "./FileUpload";
 import { Field, Select, TextArea, TextInput } from "./ui";
 
 type Props = {
@@ -69,6 +70,16 @@ export function PromptForm({ value, onChange }: Props) {
           onChange={(e) => onChange({ context: e.target.value })}
           placeholder="Ex.: Tenho R$ 300 por mês para investir. Perfil conservador."
           className="min-h-[120px]"
+        />
+      </Field>
+
+      <Field
+        label="Base de informação (arquivos)"
+        hint="Documentos cujo conteúdo será incluído no prompt como fonte primária. Lidos apenas no seu navegador."
+      >
+        <FileUpload
+          value={value.attachments}
+          onChange={(attachments) => onChange({ attachments })}
         />
       </Field>
 

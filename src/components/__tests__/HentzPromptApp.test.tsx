@@ -51,4 +51,16 @@ describe("HentzPromptApp", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Nenhuma chave de API configurada.");
     vi.unstubAllGlobals();
   });
+
+  it("anexa arquivo como base de informação e permite remover", async () => {
+    render(<HentzPromptApp />);
+    const file = new File(["produto,preco\ncaneta,2.50"], "tabela.csv", { type: "text/csv" });
+    fireEvent.change(screen.getByTestId("file-input"), { target: { files: [file] } });
+    expect(await screen.findByText("tabela.csv")).toBeInTheDocument();
+    expect(screen.getByTestId("prompt-preview")).toHaveTextContent("### tabela.csv");
+    expect(screen.getByTestId("prompt-preview")).toHaveTextContent("caneta,2.50");
+    fireEvent.click(screen.getByLabelText("Remover tabela.csv"));
+    expect(screen.queryByText("tabela.csv")).not.toBeInTheDocument();
+    expect(screen.getByTestId("prompt-preview")).not.toHaveTextContent("Base de Informação");
+  });
 });
